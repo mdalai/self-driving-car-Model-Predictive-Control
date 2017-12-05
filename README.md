@@ -9,6 +9,31 @@
     - ```install_ipopt.sh``` would not work using /mnt/repo.. under Bash on Ubuntu WIN 10. You have to ```git clone``` the repo using Bash on Ubuntu WIN 10.
     - AND execute ```./install_ipopt.sh``` won't work. It gives an Makefile error. We have to add sudo in front like ```sudo ./install_ipopt.sh```.
     
+```bash
+# update
+sudo apt-get update
+
+# gfortran dependency
+sudo apt-get install gfortran
+
+# get unzip
+sudo apt-get install unzip
+
+# Ipopt: get, install, unzip
+wget https://www.coin-or.org/download/source/Ipopt/Ipopt-3.12.7.zip && unzip Ipopt-3.12.7.zip && rm Ipopt-3.12.7.zip
+./install_ipopt.sh
+
+# CppAD
+sudo apt-get install cppad
+
+# Gnuplot
+sudo apt-get install gnuplot
+
+# python and matplotlib
+sudo apt-get install python-matplotlib
+sudo apt-get install python2.7-dev
+```
+    
 ## Edit the code
 - use Visual Studio Code to edit the code in the WINDOWS environmnet.
 - use /mnt/repo... to compile the code in the Bash on Ubuntu on Windows.
