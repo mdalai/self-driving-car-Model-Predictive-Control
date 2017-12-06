@@ -42,3 +42,8 @@ sudo apt-get install python2.7-dev
 - Make a build directory: mkdir build && cd build
 - Compile: cmake .. && make
 - Run it: ./mpc.
+
+# MPC Algorithm
+## Coordinates transformation
+- Map Coordinates to Car coordinates
+- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
