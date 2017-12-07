@@ -50,3 +50,12 @@ sudo apt-get install python2.7-dev
 ## Coordinates transformation
 - Map Coordinates to Car coordinates
 - [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
+
+
+
+Fit 3rd order polynomial based on given 6 waypoints.
+
+
+Calculate CTE and EPSI.
+
+
