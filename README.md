@@ -1,5 +1,8 @@
 # self-driving-car-Model-Predictive-Control
 - [CarND Term 2 Model Predictive Control (MPC) Project](https://github.com/udacity/CarND-MPC-Project)
+- **Two objectives of MPC project**:
+   - Speed: should come as close as possible to the desired speed based on the cost function.
+   - How well the result is fitting 6 waypoints?
 
 # Install, edit and run the code instructions
 ## Dependencies
