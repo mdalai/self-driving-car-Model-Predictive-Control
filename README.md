@@ -54,6 +54,7 @@ sudo apt-get install python2.7-dev
 
 
 Fit 3rd order polynomial based on given 6 waypoints.
+ - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
 
 
 Calculate CTE (Cross Track Error) and EPSI (Angle Error).
