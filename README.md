@@ -56,7 +56,7 @@ sudo apt-get install python2.7-dev
 Fit 3rd order polynomial based on given 6 waypoints.
 
 
-Calculate CTE and EPSI.
+Calculate CTE (Cross Track Error) and EPSI (Angle Error).
  - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
  - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
 
