@@ -38,7 +38,12 @@
  
 ## MPC
 ### Set up everything required for the MPC
-- Define the Duration of trajectory T by deciding the N and dt. [N=10, dt=0.02].
+- Define the Horizon T by deciding on the N and dt. [N=10, dt=0.02].
+   - The horizon T should be just a few seconds at most because the environment will change enough that it won't make sense to predict any further into the future. I tried with 5, 2, 1 seconds.
+   - Number of Timesteps - N:  determines the number of variables optimized by the MPC. This is also the major driver of computational cost.
+   - Dt: MPC attempts to approximate a continuous reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory.
+   
+   
 - Define vehicle model [x,y,psi,v,cte,psi_error].
    - We will use Global Kinematic Model.
    - In order to define a cost function we will add CTE and Orientation Error to the state. This means our state has 6 elements respectively (x,y,psi,v,cte,epsi).
