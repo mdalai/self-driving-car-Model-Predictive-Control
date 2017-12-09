@@ -31,8 +31,9 @@
 - We will use this coefficients to calc CTE and EPSI.
 
 ### Calculate CTE (Cross Track Error) and EPSI (Angle Error).
- - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
- - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
+ - Define a function: polyeval, which calc y value if the coeffs and x are given.
+ - CTE = polyeval(coeffs, Px) - Py;   Where (Px, Py) is car's position in car coordinate, which is (0,0).
+ - EPSI = psi - atan(coeffs[1] + 2 x Px x coeffs[2] + 3 x coeffs[3] x pow(Px,2));  Where (Px, Py) is car's position in car coordinate, which is (0,0).
  
  
 ## MPC
