@@ -38,7 +38,7 @@
  
 ## MPC
 ### Set up everything required for the MPC
-- Define the Horizon T by deciding on the N and dt. [N=10, dt=0.02].
+- Define the Horizon T by deciding on the N and dt. [N=10, dt=0.1].
    - The horizon T should be just a few seconds at most because the environment will change enough that it won't make sense to predict any further into the future.
    - Number of Timesteps - N:  determines the number of variables optimized by the MPC. This is also the major driver of computational cost.
    - Dt: MPC attempts to approximate a continuous reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory.
