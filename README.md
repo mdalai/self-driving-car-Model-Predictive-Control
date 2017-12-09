@@ -27,7 +27,7 @@
 - [This visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12) helps me understand the coordinate transformation concept a lot.
 ### Polynomial Fit 
 - With given 6 waypoints, we need to Fit 3rd order polynomial. This is the trajectory we need to input for MPC.
-- We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code. This code returns the coefficients of the 3rd order polynomial. 
+- We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code. This code returns the coefficients of the 3rd order polynomial. **Notes**: this code requires the waypoints in Eigen::vector, so we have to convert the vector waypoints into Eigen::vector waypoints.
 - We will use this coefficients to calc CTE and EPSI.
 
 ### Calculate CTE (Cross Track Error) and EPSI (Angle Error).
