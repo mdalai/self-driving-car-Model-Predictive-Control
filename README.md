@@ -3,6 +3,39 @@
 - **Two objectives of MPC project**:
    - Speed: should come as close as possible to the desired speed based on the cost function.
    - How well the result is fitting 6 waypoints?
+   
+# MPC(Model Predictive Control)
+**Model Predictive Control** makes the job of following a trajectory as an _optimization problem_. The solution to the optimization problem is to define a cost function, and calculate the optimal trajectory.  We have to constantly re-evaluate because our trajectory prediction changes over time. 
+
+**MPC Steps**:
+1. Set up everything required for the MPC loop: 
+   - Duration of trajectory T by choosing N and dt. [N=10, dt=0.02].
+   - Define vehicle model [x,y,psi,v,cte,psi_error] and constraints such as actual limitations [delta, a]. 
+   - Define the cost function. 
+2. MPC Loop:
+   - Pass current state to MPC
+   - Optimization solver is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function. The solver is IPOPT.
+   - Apply the first control inputs to the vehicle
+   - Repeat the loop
+
+ Latency: a delay occurred as the control command propagates through the system. PID Controller cannot deal with it. But MPC can solve this issue.
+
+
+
+
+## Coordinates transformation
+- Map Coordinates to Car coordinates
+- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
+
+
+
+Fit 3rd order polynomial based on given 6 waypoints.
+ - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
+
+
+Calculate CTE (Cross Track Error) and EPSI (Angle Error).
+ - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
+ - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
 
 # Install, edit and run the code instructions
 ## Dependencies
@@ -45,20 +78,3 @@ sudo apt-get install python2.7-dev
 - Make a build directory: mkdir build && cd build
 - Compile: cmake .. && make
 - Run it: ./mpc.
-
-# MPC Algorithm
-## Coordinates transformation
-- Map Coordinates to Car coordinates
-- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
-
-
-
-Fit 3rd order polynomial based on given 6 waypoints.
- - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
-
-
-Calculate CTE (Cross Track Error) and EPSI (Angle Error).
- - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
- - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
-
-
