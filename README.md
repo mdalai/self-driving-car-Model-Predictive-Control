@@ -23,10 +23,12 @@
 3. Calc CTE & EPSI
 ### Coordinates transformation
 - Wayponits are given in Global Map Coordinates. We need to transform the waypoints from Map Coordinate to Car coordinate. This process makes the next step (Polynomial fit AND CTE & EPSI calc) easier.
-- [This visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12) helps me understand the coordinate transformation.
-### Polynomial Fit
-Fit 3rd order polynomial based on given 6 waypoints.
- - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
+- We need to shift the point (Px, Py) and tweet the orientation angle(PSI). 
+- [This visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12) helps me understand the coordinate transformation concept a lot.
+### Polynomial Fit 
+- With given 6 waypoints, we need to Fit 3rd order polynomial. This is the trajectory we need to input for MPC.
+- We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code. This code returns the coefficients of the 3rd order polynomial. 
+- We will use this coefficients to calc CTE and EPSI.
 
 ### Calculate CTE (Cross Track Error) and EPSI (Angle Error).
  - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
