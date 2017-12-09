@@ -4,9 +4,22 @@
    - Speed: should come as close as possible to the desired speed based on the cost function.
    - How well the result is fitting 6 waypoints?
    
+
+[MPC_process]: ./assets/MPC_process.PNG
+   
 # MPC(Model Predictive Control)
 **Model Predictive Control** makes the job of following a trajectory as an _optimization problem_. The solution to the optimization problem is to define a cost function, and calculate the optimal trajectory.  We have to constantly re-evaluate because our trajectory prediction changes over time. 
 
+**MPC Process**:
+1. MPC Preprocessing
+2. Apply MPC
+3. Return results (steering value & throttle)
+
+![alt text][MPC_process]
+
+## MPC Preprocessing
+
+## MPC
 **MPC Steps**:
 1. Set up everything required for the MPC loop: 
    - Duration of trajectory T by choosing N and dt. [N=10, dt=0.02].
