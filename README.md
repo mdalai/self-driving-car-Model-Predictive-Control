@@ -30,7 +30,7 @@
 - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code. This code returns the coefficients of the 3rd order polynomial. **Notes**: this code requires the waypoints in Eigen::vector, so we have to convert the vector waypoints into Eigen::vector waypoints.
 - We will use this coefficients to calc CTE and EPSI.
 
-### Calculate CTE (Cross Track Error) and EPSI (Angle Error).
+### Calculate CTE (Cross Track Error) and EPSI (Orientation Error).
  - Define a function: polyeval, which calc y value if the coeffs and x are given.
  - CTE = polyeval(coeffs, Px) - Py;   Where (Px, Py) is car's position in car coordinate, which is (0,0).
  - EPSI = psi - atan(coeffs[1] + 2 x Px x coeffs[2] + 3 x coeffs[3] x pow(Px,2));  Where (Px, Py) is car's position in car coordinate, which is (0,0); AND psi=0 as well.
