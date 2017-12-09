@@ -18,11 +18,12 @@
 ![alt text][MPC_process]
 
 ## MPC Preprocessing
+1. Coordinates transformation
+2. Polynomial Fit
+3. Calc CTE & EPSI
 ### Coordinates transformation
-- Map Coordinates to Car coordinates
-- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
-
-
+- Wayponits are given in Global Map Coordinates. We need to transform the waypoints from Map Coordinate to Car coordinate. This process makes the next step (Polynomial fit AND CTE & EPSI calc) easier.
+- [This visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12) helps me understand the coordinate transformation.
 ### Polynomial Fit
 Fit 3rd order polynomial based on given 6 waypoints.
  - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
