@@ -37,18 +37,21 @@
  
  
 ## MPC
-**MPC Steps**:
-1. Set up everything required for the MPC loop: 
-   - Duration of trajectory T by choosing N and dt. [N=10, dt=0.02].
-   - Define vehicle model [x,y,psi,v,cte,psi_error] and constraints such as actual limitations [delta, a]. 
-   - Define the cost function. 
-2. MPC Loop:
+### Set up everything required for the MPC
+- Define the Duration of trajectory T by deciding the N and dt. [N=10, dt=0.02].
+- Define vehicle model [x,y,psi,v,cte,psi_error] 
+- Define constraints such as actual limitations [delta, a]. 
+- Define the cost function. 
+### MPC Calc
    - Pass current state to MPC
    - Optimization solver is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function. The solver is IPOPT.
    - Apply the first control inputs to the vehicle
    - Repeat the loop
+### Return results
 
- Latency: a delay occurred as the control command propagates through the system. PID Controller cannot deal with it. But MPC can solve this issue.
+
+
+Latency: a delay occurred as the control command propagates through the system. PID Controller cannot deal with it. But MPC can solve this issue.
 
 
 
