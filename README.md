@@ -43,7 +43,8 @@
    - Number of Timesteps - N:  determines the number of variables optimized by the MPC. This is also the major driver of computational cost.
    - Dt: MPC attempts to approximate a continuous reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory.
    - Tunning process:
-      - I tried T =  5 seconds. It didnot work. If I use large N and shorter dt, it is computationally expensive. If I use smaller N and longer dt, the cost function value is too big. So I decided to use 1 second.
+      - I tried T =  5 seconds. It didnot work. If I use large N and shorter dt, it is computationally expensive. If I use smaller N and longer dt, the cost function value is too big. So I decided to use 1 second which should be computational efficient and more accurate. Now I have to find out the balance between N and dt.
+      - T = 1. 
    
    
 - Define vehicle model [x,y,psi,v,cte,psi_error].
