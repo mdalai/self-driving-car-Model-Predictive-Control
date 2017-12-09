@@ -44,7 +44,7 @@
    - Dt: MPC attempts to approximate a continuous reference trajectory by means of discrete paths between actuations. Larger values of dt result in less frequent actuations, which makes it harder to accurately approximate a continuous reference trajectory.
    - Tunning process:
       - I tried T =  5 seconds. It didnot work. If I use large N and shorter dt, it is computationally expensive. If I use smaller N and longer dt, the cost function value is too big. So I decided to use 1 second which should be computational efficient and more accurate. Now I have to find out the balance between N and dt.
-      - T = 1 : N=100, dt=0.01. It did come up with a very low cost value. But it is computational too expensive. What it means is controller is slow to respond. The car drives off the road.
+      - T = 1 : N=100, dt=0.01. It did come up with a very low cost value. But it is computational too expensive. The MPC Solver has to find a optimal (delta, a) from a cost function which has 100 variables. What it means is controller is slow to respond. The car drives off the road.
       - T = 1 : N=50, dt=0.02. The cost value goes up. It did get better. The car went off the road in the curve. It is computational expensive. Keep lowering the N.
       - T = 1 : N=10, dt=0.1. It works. The cost value goes up comparing with last try. 
       - T = 1 : N=5, dt=0.2. The car goes off the track when it starts getting faster. The cost values is too high. I think the dt is too high, the cost function can not normalize well.   
