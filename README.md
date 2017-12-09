@@ -52,14 +52,17 @@
 - Define vehicle model [x,y,psi,v,cte,psi_error].
    - We will use Global Kinematic Model.
    - In order to define a cost function we will add CTE and Orientation Error to the state. This means our state has 6 elements respectively (x,y,psi,v,cte,epsi).
-- Define constraints such as actual limitations [delta, a]. 
+- Define variables limit.
+   - set delta limits [-25,25]
+   - set acceleration limits [-1,1]
+   - set non-actuators limits [-1.0e19,1.0e19].
+- Define constraints limits.
 - Define the cost function. 
 ### MPC Calc
-   - Pass current state to MPC
-   - Optimization solver is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function. The solver is IPOPT.
+   - Optimization solver -  [IPOPT](https://projects.coin-or.org/Ipopt/) is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function.
+   - [CppAD](https://www.coin-or.org/CppAD/): CppAD is a library we'll use for automatic differentiation. By using CppAD we don't have to manually compute derivatives, which is tedious and prone to error.
    - Apply the first control inputs to the vehicle
-   - Repeat the loop
-### Return results
+
 
 
 
