@@ -18,7 +18,20 @@
 ![alt text][MPC_process]
 
 ## MPC Preprocessing
+### Coordinates transformation
+- Map Coordinates to Car coordinates
+- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
 
+
+### Polynomial Fit
+Fit 3rd order polynomial based on given 6 waypoints.
+ - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
+
+### Calculate CTE (Cross Track Error) and EPSI (Angle Error).
+ - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
+ - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
+ 
+ 
 ## MPC
 **MPC Steps**:
 1. Set up everything required for the MPC loop: 
@@ -36,19 +49,7 @@
 
 
 
-## Coordinates transformation
-- Map Coordinates to Car coordinates
-- [Great visualization](https://discussions.udacity.com/t/mpc-car-space-conversion-and-output-of-solve-intuition/249469/12).
 
-
-
-Fit 3rd order polynomial based on given 6 waypoints.
- - We adapt [this Polyfit](https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716) code.
-
-
-Calculate CTE (Cross Track Error) and EPSI (Angle Error).
- - CTE = polyeval(coeffs, x) - y;  Where (x, y) is car's posion in car coordinates. 
- - EPSI = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
 
 # Install, edit and run the code instructions
 ## Dependencies
