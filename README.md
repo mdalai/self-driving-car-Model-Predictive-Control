@@ -39,7 +39,9 @@
 ## MPC
 ### Set up everything required for the MPC
 - Define the Duration of trajectory T by deciding the N and dt. [N=10, dt=0.02].
-- Define vehicle model [x,y,psi,v,cte,psi_error] 
+- Define vehicle model [x,y,psi,v,cte,psi_error].
+   - We will use Global Kinematic Model.
+   - In order to define a cost function we will add CTE and Orientation Error to the state. This means our state has 6 elements respectively (x,y,psi,v,cte,epsi).
 - Define constraints such as actual limitations [delta, a]. 
 - Define the cost function. 
 ### MPC Calc
