@@ -73,6 +73,8 @@
         
         This term also prevents the controller to choose a high enough steering angle when the car approaches a turn at higher speed, thus getting close to the edge of the road.
    - Tune weights for each term.
+      - Setting a higher penalty factor for the steering angle difference leads to a more stable control behavior, especially at higher velocities.
+      
 ### MPC Calc
    - Optimization solver -  [IPOPT](https://projects.coin-or.org/Ipopt/) is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function.
    - [CppAD](https://www.coin-or.org/CppAD/): CppAD is a library we'll use for automatic differentiation. By using CppAD we don't have to manually compute derivatives, which is tedious and prone to error.
@@ -93,6 +95,15 @@
    - The yaw angle psi_t and the position are zero after you have transformed the problem into vehicle coordinates.
    - You can get the current steering angle in radians from the simulator: double delta= j[1]["steering_angle"].
    - You could try a longer latency time like 125ms in order to account for the processing time of the solver and the latency of the communication with the simulator.
+   
+### Approach 2: Use previous actuations in constraints of cost function defination.
+
+      ```c++
+               if (t > 1) {   // use previous actuations (to account for latency)
+                       a0 = vars[a_start + t - 2];
+                       delta0 = vars[delta_start + t - 2];
+                } 
+      ```
 
 
 # Install, edit and run the code instructions
@@ -133,6 +144,11 @@ sudo apt-get install python2.7-dev
 - use /mnt/repo... to compile the code in the Bash on Ubuntu on Windows.
 - c++ size_t
 - c++ define a class (FG_eval) in a class (MPC).
+- It is good practice in C++ to declare variables that will not or should not change in the current scope
+as const throughout your code. This helps to prevent bugs and will help the compiler to optimize the code during compilation.
+ ```c++
+   const double Lf = 2.67;
+ ```
     
 ## RUN the code
 - Make a build directory: mkdir build && cd build
