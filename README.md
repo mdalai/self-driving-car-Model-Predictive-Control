@@ -59,6 +59,20 @@
    - set non-actuators limits [-1.0e19,1.0e19].
 - Define constraints limits.
 - Define the cost function. 
+   - Define terms include in the cost function.   
+      - Extra term could slow down the car, which might not necessary. For instance, following extra cost term slows down the car in the curve almost halt. 
+        ```C++
+           // Minimize the use of actuators.
+             for (int t = 0; t < N - 1; t++) {
+               fg[0] += 5*CppAD::pow(vars[delta_start + t], 2);  // 5,1
+               fg[0] += 5*CppAD::pow(vars[a_start + t], 2);     // 5,1
+               // try adding penalty for speed + steer
+               fg[0] += 700*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
+             }
+        ```
+        
+        This term also prevents the controller to choose a high enough steering angle when the car approaches a turn at higher speed, thus getting close to the edge of the road.
+   - Tune weights for each term.
 ### MPC Calc
    - Optimization solver -  [IPOPT](https://projects.coin-or.org/Ipopt/) is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function.
    - [CppAD](https://www.coin-or.org/CppAD/): CppAD is a library we'll use for automatic differentiation. By using CppAD we don't have to manually compute derivatives, which is tedious and prone to error.
