@@ -99,7 +99,7 @@
 ### Approach 1: Predict initial state for MPC at the latency duration
 - We will predict the state at the ```t + dt``` using the vehicle model:
        
-       ![alt text][vehicle_model]
+![alt text][vehicle_model]
        
     Where ```t``` represents current state, ```t+1```: new state, and delay duration is ```dt```.
 - Some tips to implement this approach:
