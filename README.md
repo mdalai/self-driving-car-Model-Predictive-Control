@@ -6,6 +6,7 @@
    
 
 [MPC_process]: ./assets/MPC_process.PNG
+[vehicle_model]: ./assets/vehicle_model.PNG
    
 # MPC(Model Predictive Control)
 **Model Predictive Control** makes the job of following a trajectory as an _optimization problem_. The solution to the optimization problem is to define a cost function, and calculate the optimal trajectory.  We have to constantly re-evaluate because our trajectory prediction changes over time. 
@@ -63,14 +64,20 @@
    - [CppAD](https://www.coin-or.org/CppAD/): CppAD is a library we'll use for automatic differentiation. By using CppAD we don't have to manually compute derivatives, which is tedious and prone to error.
    - Apply the first control inputs to the vehicle
 
-
-
-
-Latency: a delay occurred as the control command propagates through the system. PID Controller cannot deal with it. But MPC can solve this issue.
-
-
-
-
+## Latency
+**Latency**: a delay occurred as the control command propagates through the system. A realistic delay might be on the order of _100 milliseconds_. PID Controller cannot deal with it. But MPC can solve this issue.
+### Approach 1: Predict initial state for MPC at the latency duration
+- We will predict the state at the ```t + dt``` using the vehicle model:
+       ![alt text][vehicle_model]
+       
+    Where ```t``` represents current state, ```t+1```: new state, and delay duration is ```dt```.
+- Some tips to implement this approach:
+   - Convert the velocity to m/s.
+   - Implement all of the model update equations as shown above.
+   - Pay attention to the sign of the steering angle.
+   - The yaw angle psi_t and the position are zero after you have transformed the problem into vehicle coordinates.
+   - You can get the current steering angle in radians from the simulator: double delta= j[1]["steering_angle"].
+   - You could try a longer latency time like 125ms in order to account for the processing time of the solver and the latency of the communication with the simulator.
 
 
 # Install, edit and run the code instructions
