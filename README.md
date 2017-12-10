@@ -62,10 +62,6 @@
    - Define terms include in the cost function.   
       - Extra term could slow down the car, which might not necessary. For instance, following extra cost term slows down the car in the curve almost halt. 
         ```C++
-           // Minimize the use of actuators.
-             for (int t = 0; t < N - 1; t++) {
-               fg[0] += 5*CppAD::pow(vars[delta_start + t], 2);  // 5,1
-               fg[0] += 5*CppAD::pow(vars[a_start + t], 2);     // 5,1
                // try adding penalty for speed + steer
                fg[0] += 700*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
              }
