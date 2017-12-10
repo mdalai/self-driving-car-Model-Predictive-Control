@@ -68,11 +68,12 @@
 **Latency**: a delay occurred as the control command propagates through the system. A realistic delay might be on the order of _100 milliseconds_. PID Controller cannot deal with it. But MPC can solve this issue.
 ### Approach 1: Predict initial state for MPC at the latency duration
 - We will predict the state at the ```t + dt``` using the vehicle model:
+       
        ![alt text][vehicle_model]
        
     Where ```t``` represents current state, ```t+1```: new state, and delay duration is ```dt```.
 - Some tips to implement this approach:
-   - Convert the velocity to m/s.
+   - Convert the velocity to m/s. Velocity, as reported by the simulator, is measured in mph, while the waypoints are measured in meters.
    - Implement all of the model update equations as shown above.
    - Pay attention to the sign of the steering angle.
    - The yaw angle psi_t and the position are zero after you have transformed the problem into vehicle coordinates.
