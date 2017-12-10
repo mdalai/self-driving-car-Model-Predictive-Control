@@ -91,7 +91,14 @@
 - Some tips to implement this approach:
    - Convert the velocity to m/s. Velocity, as reported by the simulator, is measured in mph, while the waypoints are measured in meters.
    - Implement all of the model update equations as shown above.
-   - Pay attention to the sign of the steering angle.
+   - Pay attention to the sign of the steering angle. Note if δ is positive we rotate counter-clockwise, or turn left. In the simulator however, a positive value implies a right turn and a negative value implies a left turn. 
+   ```c++
+          // new_psi = psi + (v/Lf)*delta*dt;
+          new_psi = psi - (v/Lf)*delta*dt;
+          
+          // new_epsi = epsi + (v/Lf)*delta*dt;
+          new_epsi = epsi - (v/Lf)*delta*dt; 
+   ```
    - The yaw angle psi_t and the position are zero after you have transformed the problem into vehicle coordinates.
    - You can get the current steering angle in radians from the simulator: double delta= j[1]["steering_angle"].
    - You could try a longer latency time like 125ms in order to account for the processing time of the solver and the latency of the communication with the simulator.
