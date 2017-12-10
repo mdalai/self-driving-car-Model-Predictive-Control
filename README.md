@@ -70,6 +70,18 @@
         This term also prevents the controller to choose a high enough steering angle when the car approaches a turn at higher speed, thus getting close to the edge of the road.
    - Tune weights for each term.
       - Setting a higher penalty factor for the steering angle difference leads to a more stable control behavior, especially at higher velocities.
+      - 
+      
+   ```c++
+   // Weight defination for the cost function
+    const double weight_cte = 500;  // 1, 100,  3000, 2000, 1000, 500
+    const double weight_epsi = 3000;  // 1, 3000, 2000 
+    const double weight_v = 1;  // 1, 10, 100, 1000
+    const double weight_delta = 100;  // 1, 5, 100, 50
+    const double weight_a = 50;       // 1, 5, 100, 50
+    const double weight_gap_delta = 15000;  // 1, 1000, 500, 5000, 10000
+    const double weight_gap_a = 10000;      // 1, 1000, 500, 5000, 10000, 15000
+   ```
       
 ### MPC Calc
    - Optimization solver -  [IPOPT](https://projects.coin-or.org/Ipopt/) is called. The solver uses initial state, the model constraints and cost function to return a controls inputs that minimize the cost function.
