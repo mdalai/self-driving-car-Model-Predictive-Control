@@ -102,11 +102,6 @@ int main() {
           // Waypoints are in Global map coordinates
           // we need to convert these points from map coordinate to car coordinate
           // it will make it easy to calc cte/epsi & fit polynomial
-          
-          /*std::cout<<"BEFORE>>>>>>>>>>>>>>>>>:"<<endl;
-          for (int i=0; i< ptsx.size(); i++){
-            std::cout<< ptsx[i] << endl;
-          }*/
 
           for(int i=0; i < ptsx.size(); i++) {
             double shift_x = ptsx[i] - px;
@@ -116,10 +111,6 @@ int main() {
             ptsy[i] = shift_x * sin(-psi) + shift_y * cos(-psi);
           }
 
-          /*std::cout<<"AFTER>>>>>>>>>>>:"<<endl;
-          for (int i=0; i< ptsx.size(); i++){
-            std::cout<< ptsx[i] << endl;
-          }*/
 
           /*******************************************************
            ***         Polynomial fit                         ***
@@ -144,34 +135,71 @@ int main() {
           //double epsi = psi - atan(coeffs[1] + 2*px*coeffs[2] + 3*coeffs[3]*pow(px,2));
           double epsi = -atan(coeffs[1]);
 
-          /*
-          * TODO: Calculate steering angle and throttle using MPC.
-          *
-          * Both are in between [-1, 1].
-          *
-          */
-          double steer_value;
-          double throttle_value;
 
-          steer_value = j[1]["steering_angle"];  //estimation value
-          throttle_value = j[1]["throttle"];    // estimation value
+          /*******************************************************
+           ***           Latency                               ***
+           *******************************************************/
+          // convert Velocty from mph to m/s because all waypoints are in meter NOT miles: 
+          // Formaula:  m/s = 0.46 * mph
+          double vms = 0.46 * v;
+
+          // actuator's control command latency - 100 milliseconds 
+          // Need to convert millisecond to second.
+          const double dt = 0.1;  // 0.125  0.1 
+
+          // Lf
+          const double Lf = 2.67;
+
+          //###### Current State #####################
+          // state [x, y, psi, v]   -- Just Use existing varailbes
+          px = 0;     
+          py = 0;
+          psi = 0;
+          v = vms;
+
+          //actuators [steer_value, throttle] =  [delta, a]          
+          double delta = j[1]["steering_angle"];
+          double a = j[1]["throttle"];
 
 
-          // Define the state
+          //###### New State ########################## 
+          double new_px;
+          double new_py;
+          double new_psi;
+          double new_v;
+          double new_cte;
+          double new_epsi; 
+
+          // Apply vehicle model - 
+          new_px = px + v * cos(psi) * dt;
+          new_py = py + v * sin(psi) * dt;
+          // new_psi = psi + (v/Lf)*delta*dt;
+          // Note if δ is positive we rotate counter-clockwise, or turn left. 
+          // In the simulator however, a positive value implies a right turn and a negative value implies a left turn. 
+          new_psi = psi - (v/Lf)*delta*dt;
+          new_v = v + a * dt;
+
+          // Model the Errors
+          new_cte = cte + v * sin(epsi) * dt;
+          // new_epsi = epsi + (v/Lf)*delta*dt;
+          new_epsi = epsi - (v/Lf)*delta*dt;  // same reason as above
+
+          //####### Define the NEW state for MPC #######
           Eigen::VectorXd state(6);
-          state << 0,0,0,v,cte,epsi; // px,py,psi are 0 in car oordinates.
+          state << new_px,new_py,new_psi,new_v,new_cte,new_epsi; 
 
           /*################################################################################################
             #############                            Apply MPC                            ##################
             ################################################################################################*/
+            /** TODO: Calculate steering angle and throttle using MPC.
+            * Both are in between [-1, 1].
+            */
 
           /*******************************************************
            ***         MPC SOLVER                              ***
            *******************************************************/
           // Using MPC
           auto vars = mpc.Solve(state, coeffs); // coeffs can calc future CTE & Epsi.   
-
-          double Lf = 2.67;
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
@@ -180,8 +208,7 @@ int main() {
           /*******************************************************
            ***         Return Control values                   ***
            *******************************************************/
-          msgJson["steering_angle"] = vars[0]/(deg2rad(25)*Lf);
-          //msgJson["steering_angle"] = vars[0]/(deg2rad(25));
+          msgJson["steering_angle"] = vars[0]/(deg2rad(25));
           msgJson["throttle"] = vars[1];
 
 
@@ -194,8 +221,8 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
-          double poly_inc = 2.5;
-          int num_points = 25;
+          const double poly_inc = 2.5;
+          const int num_points = 25;
           for(int i=1; i < num_points; i++){
             next_x_vals.push_back(poly_inc*i);
             next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
@@ -206,7 +233,7 @@ int main() {
 
 
           /*******************************************************
-           ***         Display Grren line                      ***
+           ***         Display Green line                      ***
            *******************************************************/
           //Display the MPC predicted trajectory 
           vector<double> mpc_x_vals;

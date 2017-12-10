@@ -24,7 +24,7 @@ const double Lf = 2.67;
 // reference trajectory  // what we want
 double ref_cte = 0;  
 double ref_epsi = 0;
-double ref_v = 100; // 100, 70;  // how fast 
+double ref_v = 70; // 100, 70;  // how fast 
 
 // define the start position in a long vector
 size_t x_start = 0;
@@ -61,27 +61,41 @@ class FG_eval {
     // TODO: Define the cost related the reference state and
     // any anything you think may be beneficial.
 
+    // Weight defination for the cost function
+    const double weight_cte = 500;  // 1, 100,  3000, 2000, 1000, 500
+    const double weight_epsi = 3000;  // 1, 3000, 2000 
+    const double weight_v = 1;  // 1, 10, 100, 1000
+    const double weight_delta = 100;  // 1, 5, 100, 50
+    const double weight_a = 50;       // 1, 5, 100, 50
+    const double weight_gap_delta = 15000;  // 1, 1000, 500, 5000, 10000
+    const double weight_gap_a = 10000;      // 1, 1000, 500, 5000, 10000, 15000
+
     // The part of the cost based on the reference state.
     for (int t = 0; t < N; t++) {
-      //fg[0] += CppAD::pow(vars[cte_start + t], 2);  
-      fg[0] += 2000*CppAD::pow(vars[cte_start + t] - ref_cte, 2);   // 1, 3000, 2000      
-      //fg[0] += CppAD::pow(vars[epsi_start + t], 2); 
-      fg[0] += 2000*CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);  // 1, 3000, 2000
-      fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
+      // CTE weight
+      fg[0] += weight_cte*CppAD::pow(vars[cte_start + t] - ref_cte, 2);      
+      // EPSI weight 
+      fg[0] += weight_epsi*CppAD::pow(vars[epsi_start + t] - ref_epsi, 2); 
+      // Velocity weight
+      fg[0] += weight_v*CppAD::pow(vars[v_start + t] - ref_v, 2);
     }
 
-    // Minimize the use of actuators.
+    // Minimize change-rate.
+    // We want smooth turn.
     for (int t = 0; t < N - 1; t++) {
-      fg[0] += 5*CppAD::pow(vars[delta_start + t], 2);  // 5,1
-      fg[0] += 5*CppAD::pow(vars[a_start + t], 2);     // 5,1
+      // Delta weight
+      fg[0] += weight_delta*CppAD::pow(vars[delta_start + t], 2);  // 5,1
+      // a weight
+      fg[0] += weight_a*CppAD::pow(vars[a_start + t], 2);     // 5,1
       // try adding penalty for speed + steer
-      fg[0] += 700*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
+      //fg[0] += 500*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
     }
 
     // Minimize the value gap between sequential actuations.
+    // The goal of this final loop is to make control decisions more consistent, or smoother
     for (int t = 0; t < N - 2; t++) {
-      fg[0] += 200*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);   // 200
-      fg[0] += 10*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);   // 10
+      fg[0] += weight_gap_delta*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);   
+      fg[0] += weight_gap_a*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2); 
     }
 
 
@@ -166,12 +180,12 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
   // set initial state
-  double x = state[0];
-  double y = state[1];
-  double psi =state[2];
-  double v = state[3];
-  double cte = state[4];
-  double epsi = state[5];
+  const double x = state[0];  // does not change in the scope, so use [const]
+  const double y = state[1];
+  const double psi =state[2];
+  const double v = state[3];
+  const double cte = state[4];
+  const double epsi = state[5];
 
 
   // TODO: Set the number of model variables (includes both states and inputs).
@@ -190,6 +204,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     vars[i] = 0;
   }  
 
+  /********* NO NEED *****************************
   // Set the initial variable values
   vars[x_start] = x;
   vars[y_start] = y;
@@ -197,6 +212,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   vars[v_start] = v;
   vars[cte_start] = cte;
   vars[epsi_start] = epsi;
+  ************************************************/
 
 
   Dvector vars_lowerbound(n_vars);
@@ -214,8 +230,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   // set delta limits [-25,25]
   for(int i=delta_start; i<a_start; i++){
-    vars_lowerbound[i] = -4.36332; // -4.36332*Lf   -4.36332
-    vars_upperbound[i] = 4.36332;  // 4.36332*Lf    4.36332
+    vars_lowerbound[i] = -4.36332; // -25 degree in radians
+    vars_upperbound[i] = 4.36332;  // +25 degree in radians
   }
 
   // accelaration upper and lower limits
