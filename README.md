@@ -101,7 +101,7 @@
        
 ![alt text][vehicle_model]
        
-    Where ```t``` represents current state, ```t+1```: new state, and delay duration is ```dt```.
+   Where ```t``` represents current state, ```t+1```: new state, and delay duration is ```dt```.
 - Some tips to implement this approach:
    - Convert the velocity to m/s. Velocity, as reported by the simulator, is measured in mph, while the waypoints are measured in meters.
    - Implement all of the model update equations as shown above.
