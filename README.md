@@ -59,6 +59,10 @@
    - set non-actuators limits [-1.0e19,1.0e19].
 - Define constraints limits.
 - Define the cost function. 
+   - Remember to convert the speed from MPH to MS.
+   ```c++
+         double ref_v = 0.46*70; //  Need to convert from MPH to ms. Formaula:  m/s = 0.46 * mph
+   ```
    - Define terms include in the cost function.   
       - Extra term could slow down the car, which might not necessary. For instance, following extra cost term slows down the car in the curve almost halt. 
         ```C++
