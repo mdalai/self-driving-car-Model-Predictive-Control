@@ -24,7 +24,7 @@ const double Lf = 2.67;
 // reference trajectory  // what we want
 double ref_cte = 0;  
 double ref_epsi = 0;
-double ref_v = 70; // 100, 70;  // how fast 
+double ref_v = 0.46*70; //  Need to convert from MPH to ms. Formaula:  m/s = 0.46 * mph
 
 // define the start position in a long vector
 size_t x_start = 0;
@@ -62,13 +62,13 @@ class FG_eval {
     // any anything you think may be beneficial.
 
     // Weight defination for the cost function
-    const double weight_cte = 500;  // 1, 100,  3000, 2000, 1000, 500
-    const double weight_epsi = 3000;  // 1, 3000, 2000 
-    const double weight_v = 1;  // 1, 10, 100, 1000
-    const double weight_delta = 100;  // 1, 5, 100, 50
-    const double weight_a = 50;       // 1, 5, 100, 50
-    const double weight_gap_delta = 15000;  // 1, 1000, 500, 5000, 10000
-    const double weight_gap_a = 10000;      // 1, 1000, 500, 5000, 10000, 15000
+    const double weight_cte = 1;      // 1, 100,  3000, 2000, 1000, 500
+    const double weight_epsi = 5;     // 1, 3000, 2000 , 100, 50
+    const double weight_v = 1;        // 1, 10, 100, 1000
+    const double weight_delta = 1;    // 1, 5, 100, 50
+    const double weight_a = 1;        // 1, 5, 100, 50
+    const double weight_gap_delta = 10000;  // 1, 1000, 500, 5000, 10000, 20000
+    const double weight_gap_a = 1;      // 1, 1000, 500, 5000, 10000, 15000
 
     // The part of the cost based on the reference state.
     for (int t = 0; t < N; t++) {
