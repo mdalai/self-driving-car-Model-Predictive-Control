@@ -72,25 +72,23 @@
         ```
         
         This term also prevents the controller to choose a high enough steering angle when the car approaches a turn at higher speed, thus getting close to the edge of the road.
-   - **Tuning weights for each term**:
-      - start with 1 for each term. 
-      - the car oscillate a lot. I added set the ```weight_epsi=2000```, then 3000 to stablize it.
-      - the car turns back and forth fastly. Use ```weight_gap_delta``` and ```weight_gap_a``` to stablize it. You probably need very high value of these. 
-      - If the green line does not match well with yellow line, means we need to tune up the ```weight_cte```. 
-      -  Higher ```weight_v``` value makes the car goes very fast. If you want to keep it within the track better take a lower value of this. 
-      - If the car making sharp turn, adjust ```weight_delta```. If the car makes fast accelaration, adjust ```weight_a```. Hight values like 100,100 will make the car goes very slow.
+   - **Tuning weights for cost function**:
+      - Start with **SET ALL weights as 1** for each term. 
+      - Increase ```weight_gap_delta``` to stablize the car from oscillation. You probably need high value, try 5000, 10000. 
+      - Slightly increase the ```weight_epsi``` to further stablize the car. 
+      - The higher weight for CTE could lead to the controller overcompensating the error which leads to oscillations.
       - Setting a higher penalty factor for the steering angle difference leads to a more stable control behavior, especially at higher velocities.
       - After many combination of above term, I decided to use following values as final weight parameters:
       
          ```c++
                   // Weight defination for the cost function
-                   const double weight_cte = 500;  // 1, 100,  3000, 2000, 1000, 500
-                   const double weight_epsi = 3000;  // 1, 3000, 2000 
-                   const double weight_v = 1;  // 1, 10, 100, 1000
-                   const double weight_delta = 100;  // 1, 5, 100, 50
-                   const double weight_a = 50;       // 1, 5, 100, 50
-                   const double weight_gap_delta = 15000;  // 1, 1000, 500, 5000, 10000
-                   const double weight_gap_a = 10000;      // 1, 1000, 500, 5000, 10000, 15000
+                   const double weight_cte = 1;      // 1, 100,  3000, 2000, 1000, 500
+                   const double weight_epsi = 5;     // 1, 3000, 2000 , 100, 50
+                   const double weight_v = 1;        // 1, 10, 100, 1000
+                   const double weight_delta = 1;    // 1, 5, 100, 50
+                   const double weight_a = 1;        // 1, 5, 100, 50
+                   const double weight_gap_delta = 10000;  // 1, 1000, 500, 5000, 10000, 20000
+                   const double weight_gap_a = 1;      // 1, 1000, 500, 5000, 10000, 15000
          ```
       
 ### MPC Calc
